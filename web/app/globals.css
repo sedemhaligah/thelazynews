@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: #F7F8FA;
+    color: #3A3D45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid #0052FF;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Scrollbar — thin, subtle */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: #E2E5EB; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #7B8190; }
+
+/* Hide scrollbar on category tab bar */
+.tab-bar                           { scrollbar-width: none; }
+.tab-bar::-webkit-scrollbar        { display: none; }
