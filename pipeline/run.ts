@@ -38,6 +38,7 @@ async function main() {
   await writeToSupabase(processed, topSummary, SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
   console.log(`[TheLazyNews] Done. ${processed.length} articles written.`)
+  process.exit(0)
 }
 
 main().catch((err) => {
