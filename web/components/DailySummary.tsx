@@ -16,10 +16,10 @@ function formatDate(dateStr: string) {
 export function DailySummary({ summary, articleCount, date }: DailySummaryProps) {
   return (
     <div
-      className="rounded-lg mb-10 px-10 py-8 md:px-12 md:py-10"
+      className="rounded-xl mb-6 px-5 py-6 sm:px-10 sm:py-8"
       style={{ background: 'linear-gradient(135deg, #0D0F14 0%, #1A1F2E 100%)' }}
     >
-      <div className="flex items-center gap-3 mb-5">
+      <div className="flex items-center gap-3 mb-4">
         <span
           className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] px-2 py-1 rounded-sm"
           style={{ color: '#0052FF', background: 'rgba(0,82,255,0.15)', border: '1px solid rgba(0,82,255,0.3)' }}
@@ -31,10 +31,10 @@ export function DailySummary({ summary, articleCount, date }: DailySummaryProps)
         </span>
       </div>
 
-      <div className="pl-5 max-w-[700px]" style={{ borderLeft: '3px solid #0052FF' }}>
+      <div className="pl-4 sm:pl-5" style={{ borderLeft: '3px solid #0052FF' }}>
         <p
-          className="font-display font-semibold text-white"
-          style={{ fontSize: '19px', lineHeight: '1.65' }}
+          className="font-display font-semibold text-white text-[15px] sm:text-[19px]"
+          style={{ lineHeight: '1.65' }}
         >
           {summary}
         </p>

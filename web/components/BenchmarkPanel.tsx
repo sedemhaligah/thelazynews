@@ -31,7 +31,7 @@ function ScoreBar({ value, max = 100 }: { value: number; max?: number }) {
 
 export function BenchmarkPanel() {
   return (
-    <div className="mb-10 rounded-lg overflow-hidden" style={{ border: '1px solid #E2E5EB' }}>
+    <div className="mb-6 rounded-xl overflow-hidden" style={{ border: '1px solid #E2E5EB' }}>
       {/* Header */}
       <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #E2E5EB' }}>
         <div>
@@ -51,53 +51,51 @@ export function BenchmarkPanel() {
         </div>
       </div>
 
-      {/* Column headers */}
-      <div
-        className="grid px-5 py-2 font-mono text-[10px] text-muted uppercase tracking-widest"
-        style={{ gridTemplateColumns: '1fr 80px 80px 80px', borderBottom: '1px solid #E2E5EB', background: '#F8F9FB' }}
-      >
-        <span>Model</span>
-        <span className="text-right pr-2">MMLU</span>
-        <span className="text-right pr-2">HumanEval</span>
-        <span className="text-right pr-2">MATH</span>
-      </div>
+      {/* Scrollable table (overflows on mobile) */}
+      <div className="overflow-x-auto">
+        {/* Column headers */}
+        <div
+          className="grid px-5 py-2 font-mono text-[10px] text-muted uppercase tracking-widest"
+          style={{ gridTemplateColumns: '1fr 80px 80px 80px', minWidth: '420px', borderBottom: '1px solid #E2E5EB', background: '#F8F9FB' }}
+        >
+          <span>Model</span>
+          <span className="text-right pr-2">MMLU</span>
+          <span className="text-right pr-2">HumanEval</span>
+          <span className="text-right pr-2">MATH</span>
+        </div>
 
-      {/* Rows */}
-      {BENCHMARKS.map((model, i) => {
-        const providerColor = PROVIDER_COLOR[model.provider] ?? '#888'
-        const isLast = i === BENCHMARKS.length - 1
-        return (
-          <div
-            key={model.name}
-            className="grid px-5 py-3 items-center hover:bg-[#F8F9FB] transition-colors duration-100"
-            style={{
-              gridTemplateColumns: '1fr 80px 80px 80px',
-              borderBottom: isLast ? 'none' : '1px solid #F0F2F5',
-            }}
-          >
-            {/* Model name + provider + tag */}
-            <div className="flex flex-col gap-0.5 min-w-0 pr-4">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-display font-bold text-[13px] text-primary">{model.name}</span>
-                {model.tag && (
-                  <span className="font-mono text-[10px] text-muted">{TAG_LABEL[model.tag]}</span>
-                )}
+        {/* Rows */}
+        {BENCHMARKS.map((model, i) => {
+          const providerColor = PROVIDER_COLOR[model.provider] ?? '#888'
+          const isLast = i === BENCHMARKS.length - 1
+          return (
+            <div
+              key={model.name}
+              className="grid px-5 py-3 items-center hover:bg-[#F8F9FB] transition-colors duration-100"
+              style={{
+                gridTemplateColumns: '1fr 80px 80px 80px',
+                minWidth: '420px',
+                borderBottom: isLast ? 'none' : '1px solid #F0F2F5',
+              }}
+            >
+              <div className="flex flex-col gap-0.5 min-w-0 pr-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-display font-bold text-[13px] text-primary">{model.name}</span>
+                  {model.tag && (
+                    <span className="font-mono text-[10px] text-muted">{TAG_LABEL[model.tag]}</span>
+                  )}
+                </div>
+                <span className="font-mono text-[10px] font-semibold" style={{ color: providerColor }}>
+                  {model.provider}
+                </span>
               </div>
-              <span
-                className="font-mono text-[10px] font-semibold"
-                style={{ color: providerColor }}
-              >
-                {model.provider}
-              </span>
+              <div className="pr-2"><ScoreBar value={model.mmlu} /></div>
+              <div className="pr-2"><ScoreBar value={model.humaneval} /></div>
+              <div className="pr-2"><ScoreBar value={model.math} /></div>
             </div>
-
-            {/* Scores */}
-            <div className="pr-2"><ScoreBar value={model.mmlu} /></div>
-            <div className="pr-2"><ScoreBar value={model.humaneval} /></div>
-            <div className="pr-2"><ScoreBar value={model.math} /></div>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
 
       {/* Footer */}
       <div className="px-5 py-2.5 font-mono text-[10px] text-muted" style={{ borderTop: '1px solid #E2E5EB', background: '#F8F9FB' }}>

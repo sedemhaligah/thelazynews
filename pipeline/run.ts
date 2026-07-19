@@ -1,5 +1,6 @@
 import { fetchAllRSSFeeds } from './fetch/rss'
 import { fetchFinnhubNews } from './fetch/finnhub'
+import { enrichWithOGImages } from './fetch/ogimage'
 import { deduplicateByTitle, trimPerCategory } from './process/deduplicate'
 import { summarizeAndCategorize, generateDailySummary } from './process/summarize'
 import { writeToSupabase } from './store/supabase'
@@ -29,7 +30,12 @@ async function main() {
   const trimmed = trimPerCategory(merged, 4)
   console.log(`[Pipeline] Trimmed to ${trimmed.length} articles (4 per sector)`)
 
-  const processed = await summarizeAndCategorize(trimmed, GROQ_API_KEY)
+  console.log('[Pipeline] Fetching OG images...')
+  const withImages = await enrichWithOGImages(trimmed)
+  const imageCount = withImages.filter((a) => a.imageUrl).length
+  console.log(`[Pipeline] Got images for ${imageCount}/${withImages.length} articles`)
+
+  const processed = await summarizeAndCategorize(withImages, GROQ_API_KEY)
   console.log(`[Pipeline] Summarized ${processed.length} articles`)
 
   const topSummary = await generateDailySummary(processed, GROQ_API_KEY)
