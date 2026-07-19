@@ -5,7 +5,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export type Category = 'ai_ml' | 'tech' | 'economy' | 'business' | 'finance'
+export type Category = 'ai_ml' | 'tech' | 'finance'
 
 export interface DailyEdition {
   id: string

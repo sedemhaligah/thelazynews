@@ -4,16 +4,15 @@ import { Header } from './Header'
 import { DailySummary } from './DailySummary'
 import { CategoryTabs } from './CategoryTabs'
 import { ArticleCard } from './ArticleCard'
+import { BenchmarkPanel } from './BenchmarkPanel'
 
-const VALID_CATEGORIES: Category[] = ['ai_ml', 'tech', 'economy', 'business', 'finance']
-const CATEGORY_ORDER: Category[] = ['ai_ml', 'tech', 'economy', 'business', 'finance']
+const VALID_CATEGORIES: Category[] = ['ai_ml', 'tech', 'finance']
+const CATEGORY_ORDER: Category[] = ['ai_ml', 'tech', 'finance']
 
 const SECTION_META: Record<Category, { label: string; subtitle: string }> = {
-  ai_ml:    { label: 'AI & Machine Learning', subtitle: 'robots doing things, humans panicking' },
-  tech:     { label: 'Tech & Software',       subtitle: 'your next app update is 3gb' },
-  economy:  { label: 'Economy & Markets',     subtitle: 'numbers going places, nobody knows where' },
-  business: { label: 'Business & Industry',   subtitle: 'suits making moves' },
-  finance:  { label: 'Finance',               subtitle: 'money, stonks, and the occasional chaos' },
+  ai_ml:   { label: 'AI & Machine Learning', subtitle: 'robots doing things, humans panicking' },
+  tech:    { label: 'Tech & Software',       subtitle: 'your next app update is 3gb' },
+  finance: { label: 'Finance & Markets',     subtitle: 'money, stonks, and the occasional chaos' },
 }
 
 function isValidCategory(c?: string): c is Category {
@@ -70,6 +69,8 @@ export async function EditionPage({ date, categoryFilter }: EditionPageProps) {
             date={date}
           />
         )}
+
+        <BenchmarkPanel />
 
         {filtered.length === 0 ? (
           <div className="text-center py-20">

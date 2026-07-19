@@ -1,7 +1,7 @@
 import Groq from 'groq-sdk'
 import type { RawArticle } from '../fetch/rss'
 
-export type Category = 'ai_ml' | 'tech' | 'economy' | 'business' | 'finance'
+export type Category = 'ai_ml' | 'tech' | 'finance'
 
 export interface ProcessedArticle {
   title: string
@@ -13,7 +13,7 @@ export interface ProcessedArticle {
   publishedAt: string
 }
 
-const VALID_CATEGORIES: Category[] = ['ai_ml', 'tech', 'economy', 'business', 'finance']
+const VALID_CATEGORIES: Category[] = ['ai_ml', 'tech', 'finance']
 
 function isValidCategory(c: string): c is Category {
   return VALID_CATEGORIES.includes(c as Category)
@@ -29,12 +29,12 @@ async function summarizeArticle(
 
 Summarize this article in 2-3 punchy sentences. Smart but casual. Like a clever friend texting you what happened. Active voice, specific details, light wit if the story calls for it. No jargon, no "it is worth noting", no passive voice.
 
-Feed section hint: ${article.feedCategory} — strongly prefer this as the category unless the content clearly belongs elsewhere. Use "business" for M&A, corporate strategy, company moves. Use "economy" for macro, rates, inflation, policy.
+Feed section hint: ${article.feedCategory} — strongly prefer this as the category. Use "finance" for markets, rates, inflation, economy, business, and money moves.
 
 Title: ${article.title}
 Snippet: ${snippet}
 
-Return JSON only: {"summary":"your summary","category":"ai_ml|tech|economy|business|finance"}`
+Return JSON only: {"summary":"your summary","category":"ai_ml|tech|finance"}`
 
   const response = await groq.chat.completions.create({
     model: 'llama-3.1-8b-instant',
@@ -51,7 +51,8 @@ Return JSON only: {"summary":"your summary","category":"ai_ml|tech|economy|busin
     return { summary: parsed.summary ?? '', category }
   } catch {
     // Fallback: use the feed category so miscategorization doesn't cascade
-    return { summary: text.slice(0, 300), category: (article.feedCategory as Category) ?? 'tech' }
+    const fallback = VALID_CATEGORIES.includes(article.feedCategory as Category) ? (article.feedCategory as Category) : 'tech'
+    return { summary: text.slice(0, 300), category: fallback }
   }
 }
 
@@ -111,7 +112,7 @@ export async function generateDailySummary(
 
   const prompt = `You are the editor of TheLazyNews. Your readers are smart, busy, and have zero patience for boring.
 
-Write 1 punchy paragraph (4-5 sentences) covering what happened today across AI, tech, economy, business, and finance. Sound like a brilliant friend giving you the download over coffee — specific, a little witty, no fluff or filler.
+Write 1 punchy paragraph (4-5 sentences) covering what happened today across AI, tech, and finance. Sound like a brilliant friend giving you the download over coffee — specific, a little witty, no fluff or filler.
 
 Today's stories:
 ${articleSummaries}

@@ -1,11 +1,9 @@
 import type { Article, Category } from '@/lib/supabase'
 
 const BADGE: Record<Category, { label: string; color: string; bg: string }> = {
-  ai_ml:    { label: 'AI & ML',  color: '#7B2FFF', bg: '#F3EEFF' },
-  tech:     { label: 'Tech',     color: '#0099CC', bg: '#E6F6FB' },
-  economy:  { label: 'Economy',  color: '#00875A', bg: '#E6F5F0' },
-  business: { label: 'Business', color: '#CC5500', bg: '#FFF0E6' },
-  finance:  { label: 'Finance',  color: '#CC2936', bg: '#FFF0F1' },
+  ai_ml:   { label: 'AI & ML',  color: '#7B2FFF', bg: '#F3EEFF' },
+  tech:    { label: 'Tech',     color: '#0099CC', bg: '#E6F6FB' },
+  finance: { label: 'Finance',  color: '#CC2936', bg: '#FFF0F1' },
 }
 
 function formatTimestamp(iso: string) {

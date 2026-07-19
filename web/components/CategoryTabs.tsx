@@ -4,12 +4,10 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import type { Category } from '@/lib/supabase'
 
 const TABS: { label: string; value: Category | 'all' }[] = [
-  { label: 'All',      value: 'all'      },
-  { label: 'AI & ML',  value: 'ai_ml'    },
-  { label: 'Tech',     value: 'tech'     },
-  { label: 'Economy',  value: 'economy'  },
-  { label: 'Business', value: 'business' },
-  { label: 'Finance',  value: 'finance'  },
+  { label: 'All',     value: 'all'     },
+  { label: 'AI & ML', value: 'ai_ml'   },
+  { label: 'Tech',    value: 'tech'    },
+  { label: 'Finance', value: 'finance' },
 ]
 
 interface CategoryTabsProps {

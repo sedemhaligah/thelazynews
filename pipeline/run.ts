@@ -26,8 +26,8 @@ async function main() {
   const merged = deduplicateByTitle([...rssArticles, ...finnhubArticles])
   console.log(`[Pipeline] After dedup: ${merged.length} articles`)
 
-  const trimmed = trimPerCategory(merged, 8)
-  console.log(`[Pipeline] Trimmed to ${trimmed.length} articles (8 per sector)`)
+  const trimmed = trimPerCategory(merged, 4)
+  console.log(`[Pipeline] Trimmed to ${trimmed.length} articles (4 per sector)`)
 
   const processed = await summarizeAndCategorize(trimmed, GROQ_API_KEY)
   console.log(`[Pipeline] Summarized ${processed.length} articles`)

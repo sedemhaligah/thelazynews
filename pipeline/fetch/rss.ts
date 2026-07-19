@@ -21,16 +21,11 @@ const RSS_SOURCES: Record<string, string[]> = {
     'https://www.theverge.com/rss/index.xml',
     'https://feeds.feedburner.com/TechCrunch',
   ],
-  economy: [
-    'https://feeds.bbci.co.uk/news/business/rss.xml',
-    'https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml',
-  ],
-  business: [
-    'https://www.ft.com/?format=rss',
-    'https://feeds.bbci.co.uk/news/business/rss.xml',
-  ],
   finance: [
     'https://feeds.marketwatch.com/marketwatch/topstories/',
+    'https://feeds.bbci.co.uk/news/business/rss.xml',
+    'https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml',
+    'https://www.ft.com/?format=rss',
   ],
 }
 
