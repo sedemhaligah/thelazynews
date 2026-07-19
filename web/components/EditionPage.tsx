@@ -21,14 +21,14 @@ function isValidCategory(c?: string): c is Category {
 
 function SectionDivider({ label, subtitle }: { label: string; subtitle: string }) {
   return (
-    <div className="mt-12 mb-5">
-      <div className="flex items-center gap-4 mb-1">
-        <h2 className="font-display font-bold text-[18px] text-primary whitespace-nowrap">
+    <div className="mt-8 mb-3">
+      <div className="flex items-center gap-3 mb-0.5">
+        <h2 className="font-display font-bold text-[15px] text-primary whitespace-nowrap">
           {label}
         </h2>
         <div className="flex-1 h-px bg-border" />
+        <p className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">{subtitle}</p>
       </div>
-      <p className="font-mono text-[11px] text-muted uppercase tracking-widest">{subtitle}</p>
     </div>
   )
 }
@@ -61,7 +61,7 @@ export async function EditionPage({ date, categoryFilter }: EditionPageProps) {
       <Header date={date} prevDate={prevDate} nextDate={nextDate} />
       <CategoryTabs active={activeCategory} />
 
-      <main className="max-w-[1200px] mx-auto px-6 py-10">
+      <main className="max-w-[860px] mx-auto px-6 py-8">
         {edition.top_summary && (
           <DailySummary
             summary={edition.top_summary}
@@ -89,7 +89,7 @@ export async function EditionPage({ date, categoryFilter }: EditionPageProps) {
             return (
               <section key={cat}>
                 <SectionDivider label={meta.label} subtitle={meta.subtitle} />
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="flex flex-col gap-2">
                   {catArticles.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
@@ -98,7 +98,7 @@ export async function EditionPage({ date, categoryFilter }: EditionPageProps) {
             )
           })
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col gap-2">
             {filtered.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}

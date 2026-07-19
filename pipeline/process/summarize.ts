@@ -11,6 +11,7 @@ export interface ProcessedArticle {
   summary: string
   category: Category
   publishedAt: string
+  imageUrl: string | null
 }
 
 const VALID_CATEGORIES: Category[] = ['ai_ml', 'tech', 'finance']
@@ -85,6 +86,7 @@ export async function summarizeAndCategorize(
         summary,
         category,
         publishedAt: article.publishedAt,
+        imageUrl: article.imageUrl ?? null,
       })
       console.log('ok')
     } catch (err) {

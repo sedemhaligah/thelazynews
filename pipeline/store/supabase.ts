@@ -47,6 +47,7 @@ export async function writeToSupabase(
       category: a.category,
       summary: a.summary,
       original_snippet: a.snippet,
+      image_url: a.imageUrl ?? null,
     }))
 
     const { error: insertError } = await supabase.from('articles').insert(chunk)

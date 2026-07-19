@@ -24,6 +24,7 @@ export interface Article {
   category: Category
   summary: string | null
   original_snippet: string | null
+  image_url: string | null
   created_at: string
 }
 

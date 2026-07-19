@@ -23,6 +23,7 @@ create table if not exists articles (
   )),
   summary text,
   original_snippet text,
+  image_url text,
   created_at timestamptz default now()
 );
 

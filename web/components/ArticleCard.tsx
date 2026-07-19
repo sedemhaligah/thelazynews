@@ -6,88 +6,109 @@ const BADGE: Record<Category, { label: string; color: string; bg: string }> = {
   finance: { label: 'Finance',  color: '#CC2936', bg: '#FFF0F1' },
 }
 
-function formatTimestamp(iso: string) {
-  const d = new Date(iso)
-  const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  const time = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
-  return `${date} · ${time}`
+// Placeholder icon per category when no thumbnail
+const PLACEHOLDER: Record<Category, string> = {
+  ai_ml:   '🤖',
+  tech:    '⚡',
+  finance: '📈',
+}
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const h = Math.floor(diff / 3_600_000)
+  if (h < 1) return 'just now'
+  if (h < 24) return `${h}h ago`
+  const d = Math.floor(h / 24)
+  return `${d}d ago`
 }
 
 export function ArticleCard({ article }: { article: Article }) {
-  const badge = BADGE[article.category]
+  const badge = BADGE[article.category] ?? BADGE.tech
 
   return (
     <article
-      className="bg-surface rounded-md flex flex-col shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-200 overflow-hidden"
+      className="flex gap-3 bg-surface rounded-md overflow-hidden hover:shadow-sm transition-shadow duration-150"
       style={{ border: '1px solid #E2E5EB' }}
     >
-      {/* Category color strip at the top */}
-      <div className="h-[4px] w-full shrink-0" style={{ background: badge.color }} />
+      {/* Left color accent */}
+      <div className="w-[3px] shrink-0 self-stretch" style={{ background: badge.color }} />
 
-      <div className="p-5 flex flex-col gap-3 flex-1">
-        {/* Badge */}
-        <div>
+      {/* Thumbnail */}
+      <div className="shrink-0 self-center my-3">
+        {article.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={article.image_url}
+            alt=""
+            className="w-[72px] h-[54px] object-cover rounded"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className="w-[72px] h-[54px] rounded flex items-center justify-center text-[22px]"
+            style={{ background: badge.bg }}
+          >
+            {PLACEHOLDER[article.category]}
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col justify-center gap-1 py-3 pr-4 min-w-0 flex-1">
+        {/* Badge + source row */}
+        <div className="flex items-center gap-2">
           <span
-            className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-semibold uppercase tracking-[0.03em]"
+            className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-semibold uppercase tracking-[0.03em] shrink-0"
             style={{ color: badge.color, background: badge.bg }}
           >
             {badge.label}
           </span>
+          {article.source && (
+            <span className="font-mono text-[10px] text-muted truncate">{article.source}</span>
+          )}
+          <span className="font-mono text-[10px] text-muted shrink-0 ml-auto">
+            {timeAgo(article.created_at)}
+          </span>
         </div>
 
-        {/* Headline — primary clickable element */}
+        {/* Headline */}
         {article.url ? (
           <a
             href={article.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-display font-bold text-[17px] text-primary leading-snug line-clamp-2 hover:text-accent transition-colors duration-150"
+            className="font-display font-bold text-[14px] text-primary leading-snug line-clamp-1 hover:text-accent transition-colors duration-150"
           >
             {article.title}
           </a>
         ) : (
-          <h2 className="font-display font-bold text-[17px] text-primary leading-snug line-clamp-2">
+          <h2 className="font-display font-bold text-[14px] text-primary leading-snug line-clamp-1">
             {article.title}
           </h2>
         )}
 
         {/* Summary */}
         {article.summary && (
-          <p className="font-body text-[14px] text-body leading-relaxed line-clamp-3">
+          <p className="font-body text-[12px] text-body leading-relaxed line-clamp-2">
             {article.summary}
           </p>
         )}
-
-        {/* Footer */}
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-border">
-          <div className="flex items-center font-mono text-[11px] text-muted min-w-0 gap-0">
-            {article.source && (
-              <>
-                <span className="truncate max-w-[110px]">{article.source}</span>
-                <span
-                  className="inline-block w-[3px] h-[3px] rounded-full bg-border mx-1.5 shrink-0"
-                  aria-hidden="true"
-                />
-              </>
-            )}
-            <time dateTime={article.created_at} className="shrink-0">
-              {formatTimestamp(article.created_at)}
-            </time>
-          </div>
-
-          {article.url && (
-            <a
-              href={article.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Read original: ${article.title}`}
-              className="font-body text-[12px] font-semibold text-accent hover:text-accent-hover transition-colors duration-150 shrink-0 ml-3"
-            >
-              Read &#x2192;
-            </a>
-          )}
-        </div>
       </div>
+
+      {/* Read arrow */}
+      {article.url && (
+        <div className="flex items-center pr-4 shrink-0">
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Read: ${article.title}`}
+            className="font-mono text-[11px] text-muted hover:text-accent transition-colors duration-150"
+          >
+            →
+          </a>
+        </div>
+      )}
     </article>
   )
 }

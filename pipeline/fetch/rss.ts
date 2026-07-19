@@ -6,7 +6,8 @@ export interface RawArticle {
   source: string
   snippet: string
   publishedAt: string
-  feedCategory: string   // which feed bucket this came from — used as categorization hint
+  feedCategory: string
+  imageUrl: string | null
 }
 
 const RSS_SOURCES: Record<string, string[]> = {
@@ -32,7 +33,29 @@ const RSS_SOURCES: Record<string, string[]> = {
 const parser = new Parser({
   timeout: 10000,
   headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TheLazyNewsBot/1.0)' },
+  customFields: {
+    item: [
+      ['media:content', 'media:content'],
+      ['media:thumbnail', 'media:thumbnail'],
+    ],
+  },
 })
+
+function extractImage(item: Record<string, unknown>): string | null {
+  // Try enclosure (standard RSS)
+  const enc = item.enclosure as { url?: string; type?: string } | undefined
+  if (enc?.url && enc.type?.startsWith('image')) return enc.url
+
+  // Try media:thumbnail (used by BBC, TechCrunch, etc.)
+  const thumb = item['media:thumbnail'] as { $?: { url?: string } } | undefined
+  if (thumb?.$?.url) return thumb.$.url
+
+  // Try media:content (used by The Verge, VentureBeat, etc.)
+  const media = item['media:content'] as { $?: { url?: string; type?: string } } | undefined
+  if (media?.$?.url && (!media.$?.type || media.$?.type?.startsWith('image'))) return media.$.url
+
+  return null
+}
 
 async function fetchFeed(url: string, feedCategory: string): Promise<RawArticle[]> {
   try {
@@ -46,6 +69,7 @@ async function fetchFeed(url: string, feedCategory: string): Promise<RawArticle[
       snippet: (item.contentSnippet ?? item.summary ?? item.content ?? '').slice(0, 300),
       publishedAt: item.pubDate ?? item.isoDate ?? new Date().toISOString(),
       feedCategory,
+      imageUrl: extractImage(item as Record<string, unknown>),
     }))
   } catch (err) {
     console.warn(`[RSS] Failed to fetch ${url}:`, (err as Error).message)
