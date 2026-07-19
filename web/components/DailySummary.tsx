@@ -33,8 +33,8 @@ export function DailySummary({ summary, articleCount, date }: DailySummaryProps)
 
       <div className="pl-4 sm:pl-5" style={{ borderLeft: '3px solid #0052FF' }}>
         <p
-          className="font-display font-semibold text-white text-[15px] sm:text-[19px]"
-          style={{ lineHeight: '1.65' }}
+          className="font-display font-semibold text-white text-[14px] sm:text-[18px] line-clamp-3 sm:line-clamp-none"
+          style={{ lineHeight: '1.6' }}
         >
           {summary}
         </p>

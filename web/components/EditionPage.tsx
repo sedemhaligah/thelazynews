@@ -22,12 +22,12 @@ function isValidCategory(c?: string): c is Category {
 function SectionDivider({ label, subtitle }: { label: string; subtitle: string }) {
   return (
     <div className="mt-8 mb-3">
-      <div className="flex items-center gap-3 mb-0.5">
+      <div className="flex items-center gap-3">
         <h2 className="font-display font-bold text-[15px] text-primary whitespace-nowrap">
           {label}
         </h2>
         <div className="flex-1 h-px bg-border" />
-        <p className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">{subtitle}</p>
+        <p className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap hidden sm:block">{subtitle}</p>
       </div>
     </div>
   )
